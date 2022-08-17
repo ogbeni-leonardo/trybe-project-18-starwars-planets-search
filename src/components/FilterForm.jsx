@@ -10,7 +10,12 @@ export default () => {
     byValue: '0',
   });
 
-  const { setNameFilter, setColumnFilter } = useContext(PlanetsContext);
+  const { filters, setNameFilter, setColumnFilter } = useContext(PlanetsContext);
+
+  const COLUMN_FILTERS = [
+    'population', 'orbital_period', 'diameter',
+    'rotation_period', 'surface_water',
+  ].filter((column) => !Object.keys(filters.byColumns).includes(column));
 
   const handleChange = ({ target: { name, value } }) => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -21,7 +26,12 @@ export default () => {
     setColumnFilter({
       [formData.byColumn]: [formData.byComparison, formData.byValue],
     });
+
+    setFormData((prevState) => ({ ...prevState, byColumn: COLUMN_FILTERS[0] || '' }));
   };
+
+  console.log(filters.byColumns);
+  console.log(`O valor atual do select é: ${formData.byColumn}`);
 
   return (
     <form data-testid="filter-form">
@@ -44,11 +54,9 @@ export default () => {
           onChange={ handleChange }
           value={ formData.byColumn }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          { COLUMN_FILTERS.map((column, index) => (
+            <option key={ index } value={ column }>{column}</option>
+          )) }
         </select>
       </label>
 
