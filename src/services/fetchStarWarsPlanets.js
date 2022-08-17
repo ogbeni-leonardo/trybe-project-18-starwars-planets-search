@@ -1,9 +1,6 @@
 export default async () => {
-  const ENDPOINT = 'https://swapi-trybe.herokuapp.com/api/planets/';
+  const URL_API = 'https://swapi-trybe.herokuapp.com/api/planets/';
   try {
-    const response = await fetch(ENDPOINT);
-    return response.json();
-  } catch {
-    return {};
-  }
+    const response = await fetch(URL_API); return response.json();
+  } catch { return {}; }
 };

@@ -24,7 +24,7 @@ export default () => {
   };
 
   return (
-    <form>
+    <form data-testid="filter-form">
       <label htmlFor="byName">
         <input
           data-testid="name-filter"

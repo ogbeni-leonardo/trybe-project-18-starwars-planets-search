@@ -28,8 +28,6 @@ export default function PlanetsProvider({ children }) {
     }));
   };
 
-  console.log(filters);
-
   return (
     <PlanetsContext.Provider
       value={ {
