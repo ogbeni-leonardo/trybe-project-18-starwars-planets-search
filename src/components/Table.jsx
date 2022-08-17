@@ -11,22 +11,24 @@ export default () => {
   const { planets, filters } = useContext(PlanetsContext);
 
   const columnOperator = (value, operator, comparison) => {
-    console.log(value);
-    console.log(operator);
-    console.log(comparison);
-    console.log(comparison === value);
     if (operator === 'maior que') return value > comparison;
     if (operator === 'menor que') return value < comparison;
     if (operator === 'igual a') return value === comparison;
   };
 
   const planetsFilteredByColumn = (planet) => {
-    if (filters.byColumn.length === 0) return true;
-    return columnOperator(
-      Number(planet[filters.byColumn[0]]),
-      filters.byColumn[1],
-      Number(filters.byColumn[2]),
-    );
+    if (Object.keys(filters.byColumns).length === 0) return true;
+    const isItAValidPlanet = [];
+
+    Object.entries(filters.byColumns).forEach(([column, filter]) => {
+      const value = Number(planet[column]);
+      const operator = filter[0];
+      const comparison = Number(filter[1]);
+
+      isItAValidPlanet.push(columnOperator(value, operator, comparison));
+    });
+
+    return !isItAValidPlanet.includes(false);
   };
 
   return (

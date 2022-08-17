@@ -10,22 +10,17 @@ export default () => {
     byValue: '0',
   });
 
-  const { setFilter } = useContext(PlanetsContext);
+  const { setNameFilter, setColumnFilter } = useContext(PlanetsContext);
 
   const handleChange = ({ target: { name, value } }) => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
-    if (name === 'byName') setFilter(name, value);
+    if (name === 'byName') setNameFilter(value);
   };
 
   const filterByColumn = () => {
-    setFilter(
-      'byColumn',
-      [
-        formData.byColumn,
-        formData.byComparison,
-        formData.byValue,
-      ],
-    );
+    setColumnFilter({
+      [formData.byColumn]: [formData.byComparison, formData.byValue],
+    });
   };
 
   return (

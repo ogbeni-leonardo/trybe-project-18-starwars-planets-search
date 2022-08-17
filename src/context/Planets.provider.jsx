@@ -7,7 +7,7 @@ export default function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
   const [filters, setFilters] = useState({
     byName: '',
-    byColumn: [],
+    byColumns: {},
   });
 
   const updatePlanets = (arrayOfPlanets) => {
@@ -17,14 +17,25 @@ export default function PlanetsProvider({ children }) {
     setPlanets(planetsWithoutResidents);
   };
 
-  const setFilter = (key, value) => {
-    setFilters((prevState) => ({ ...prevState, [key]: value }));
+  const setNameFilter = (value) => {
+    setFilters((prevState) => ({ ...prevState, byName: value }));
+  };
+
+  const setColumnFilter = (object) => {
+    setFilters((prevState) => ({
+      ...prevState,
+      byColumns: { ...prevState.byColumns, ...object },
+    }));
   };
 
   console.log(filters);
 
   return (
-    <PlanetsContext.Provider value={ { planets, updatePlanets, filters, setFilter } }>
+    <PlanetsContext.Provider
+      value={ {
+        planets, updatePlanets, filters, setNameFilter, setColumnFilter,
+      } }
+    >
       { children }
     </PlanetsContext.Provider>
   );
