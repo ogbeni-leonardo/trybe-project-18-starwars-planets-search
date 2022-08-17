@@ -5,6 +5,9 @@ import PlanetsContext from './Planets.context';
 
 export default function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
+  const [filters, setFilters] = useState({
+    byName: '',
+  });
 
   const updatePlanets = (arrayOfPlanets) => {
     const planetsWithoutResidents = arrayOfPlanets
@@ -13,8 +16,14 @@ export default function PlanetsProvider({ children }) {
     setPlanets(planetsWithoutResidents);
   };
 
+  const setFilter = (key, value) => {
+    setFilters((prevState) => ({ ...prevState, [key]: value }));
+  };
+
+  console.log(filters);
+
   return (
-    <PlanetsContext.Provider value={ { planets, updatePlanets } }>
+    <PlanetsContext.Provider value={ { planets, updatePlanets, filters, setFilter } }>
       { children }
     </PlanetsContext.Provider>
   );

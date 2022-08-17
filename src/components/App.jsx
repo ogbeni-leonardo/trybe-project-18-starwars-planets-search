@@ -3,6 +3,7 @@ import React, { useEffect, useContext } from 'react';
 import fetchStarWarsPlanets from '../services/fetchStarWarsPlanets';
 
 import PlanetsContext from '../context/Planets.context';
+import FilterForm from './FilterForm';
 import Table from './Table';
 
 function App() {
@@ -18,7 +19,10 @@ function App() {
   console.log(planets);
 
   return (
-    <Table />
+    <main>
+      <FilterForm />
+      <Table />
+    </main>
   );
 }
 
