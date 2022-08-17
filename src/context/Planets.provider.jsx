@@ -7,6 +7,7 @@ export default function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
   const [filters, setFilters] = useState({
     byName: '',
+    byColumn: [],
   });
 
   const updatePlanets = (arrayOfPlanets) => {

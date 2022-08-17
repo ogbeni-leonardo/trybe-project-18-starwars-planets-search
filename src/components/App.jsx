@@ -7,16 +7,13 @@ import FilterForm from './FilterForm';
 import Table from './Table';
 
 function App() {
-  const { updatePlanets, planets } = useContext(PlanetsContext);
+  const { updatePlanets } = useContext(PlanetsContext);
 
   useEffect(() => {
     fetchStarWarsPlanets().then((data) => {
-      console.log(data);
       updatePlanets(data?.results || []);
     });
   }, []);
-
-  console.log(planets);
 
   return (
     <main>

@@ -10,6 +10,25 @@ export default () => {
 
   const { planets, filters } = useContext(PlanetsContext);
 
+  const columnOperator = (value, operator, comparison) => {
+    console.log(value);
+    console.log(operator);
+    console.log(comparison);
+    console.log(comparison === value);
+    if (operator === 'maior que') return value > comparison;
+    if (operator === 'menor que') return value < comparison;
+    if (operator === 'igual a') return value === comparison;
+  };
+
+  const planetsFilteredByColumn = (planet) => {
+    if (filters.byColumn.length === 0) return true;
+    return columnOperator(
+      Number(planet[filters.byColumn[0]]),
+      filters.byColumn[1],
+      Number(filters.byColumn[2]),
+    );
+  };
+
   return (
     <table>
       <thead>
@@ -22,6 +41,7 @@ export default () => {
         { planets
           .filter((planet) => (planet.name).toLowerCase()
             .includes(filters.byName.toLowerCase()))
+          .filter((planet) => planetsFilteredByColumn(planet))
           .map((planet, index) => (
             <tr key={ index }>
               <td>{planet.name}</td>
