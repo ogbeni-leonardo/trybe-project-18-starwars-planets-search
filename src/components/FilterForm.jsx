@@ -8,9 +8,13 @@ export default () => {
     byColumn: 'population',
     byComparison: 'maior que',
     byValue: '0',
+    byColumnSort: 'population',
+    sortBy: 'ASC',
   });
 
-  const { filters, setNameFilter, setColumnFilter } = useContext(PlanetsContext);
+  const {
+    filters, setNameFilter, setColumnFilter, setSortFilter,
+  } = useContext(PlanetsContext);
 
   const COLUMN_FILTERS = [
     'population', 'orbital_period', 'diameter',
@@ -30,8 +34,14 @@ export default () => {
     setFormData((prevState) => ({ ...prevState, byColumn: COLUMN_FILTERS[0] || '' }));
   };
 
-  console.log(filters.byColumns);
-  console.log(`O valor atual do select é: ${formData.byColumn}`);
+  const sortFilter = () => {
+    setSortFilter([formData.byColumnSort, formData.sortBy]);
+  };
+
+  const opts = [
+    'population', 'orbital_period', 'diameter',
+    'rotation_period', 'surface_water',
+  ];
 
   return (
     <form data-testid="filter-form">
@@ -91,6 +101,53 @@ export default () => {
         onClick={ filterByColumn }
       >
         Filter
+      </button>
+
+      <label htmlFor="byColumnSort">
+        <select
+          data-testid="column-sort"
+          id="byColumnSort"
+          name="byColumnSort"
+          onChange={ handleChange }
+          value={ formData.byColumnSort }
+        >
+          { opts.map((column) => (
+            <option
+              key={ column }
+              value={ column }
+            >
+              {column}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label htmlFor="sortBy">
+        <input
+          type="radio"
+          name="sortBy"
+          onChange={ handleChange }
+          data-testid="column-sort-input-asc"
+          value="ASC"
+        />
+      </label>
+
+      <label htmlFor="sortBy">
+        <input
+          type="radio"
+          name="sortBy"
+          onChange={ handleChange }
+          data-testid="column-sort-input-desc"
+          value="DESC"
+        />
+      </label>
+
+      <button
+        data-testid="column-sort-button"
+        type="button"
+        onClick={ sortFilter }
+      >
+        Ordenar
       </button>
     </form>
   );

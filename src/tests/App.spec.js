@@ -73,4 +73,36 @@ describe('Test do componente "App"', () => {
 
     expect(screen.getByText(/diameter igual a 012/i)).toBeInTheDocument();
   });
+
+  it('Verifica se a tabela é ordenada segundo o esperado pelos filtros', async () => {
+    render(
+      <PlanetsProvider>
+        <App />
+      </PlanetsProvider>,
+    );
+
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+
+    const columnSort = screen.getByTestId('column-sort');
+    const sortByAsc = screen.getByTestId('column-sort-input-asc');
+    const sortByDesc = screen.getByTestId('column-sort-input-desc');
+    const sortButton = screen.getByTestId('column-sort-button');
+
+    userEvent.selectOptions(columnSort, ['diameter'])
+    userEvent.click(sortByAsc);
+    userEvent.click(sortButton);
+
+    const ascTableCells = screen.getAllByRole('row');
+    expect(ascTableCells[1]).toHaveTextContent(/Endor/i);
+    expect(ascTableCells.at(-1)).toHaveTextContent(/Bespin/i);
+
+    userEvent.selectOptions(columnSort, ['population'])
+    userEvent.click(sortByDesc);
+    userEvent.click(sortButton);
+
+    const descTableCells = screen.getAllByRole('row');
+    expect(descTableCells[1]).toHaveTextContent(/Coruscant/i);
+    expect(descTableCells.at(-1)).toHaveTextContent(/Dagobah/i);
+
+  });
 });

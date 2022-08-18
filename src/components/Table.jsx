@@ -31,6 +31,21 @@ export default () => {
     return !isItAValidPlanet.includes(false);
   };
 
+  const sortBy = (a, b) => {
+    const valueA = a[filters.sortBy[0]];
+    const valueB = b[filters.sortBy[0]];
+
+    console.log(valueA, valueB);
+
+    if (filters.sortBy[1] === 'ASC') {
+      if (valueA === 'unknown') return 1;
+      if (valueB === 'unknown') return 0 - 1;
+
+      return Number(valueA) - Number(valueB);
+    }
+    return valueB - valueA;
+  };
+
   return (
     <table>
       <thead>
@@ -44,9 +59,10 @@ export default () => {
           .filter((planet) => (planet.name).toLowerCase()
             .includes(filters.byName.toLowerCase()))
           .filter((planet) => planetsFilteredByColumn(planet))
+          .sort(sortBy)
           .map((planet, index) => (
             <tr key={ index }>
-              <td>{planet.name}</td>
+              <td data-testid="planet-name">{planet.name}</td>
               <td>{planet.rotation_period}</td>
               <td>{planet.orbital_period}</td>
               <td>{planet.diameter}</td>

@@ -8,6 +8,7 @@ export default function PlanetsProvider({ children }) {
   const [filters, setFilters] = useState({
     byName: '',
     byColumns: {},
+    sortBy: [],
   });
 
   const updatePlanets = (arrayOfPlanets) => {
@@ -38,6 +39,10 @@ export default function PlanetsProvider({ children }) {
     setFilters((prevState) => ({ ...prevState, byColumns: {} }));
   };
 
+  const setSortFilter = (array) => {
+    setFilters((prevState) => ({ ...prevState, sortBy: array }));
+  };
+
   return (
     <PlanetsContext.Provider
       value={ {
@@ -48,6 +53,7 @@ export default function PlanetsProvider({ children }) {
         setColumnFilter,
         removeColumnFilter,
         cleanAllColumnFilters,
+        setSortFilter,
       } }
     >
       { children }
