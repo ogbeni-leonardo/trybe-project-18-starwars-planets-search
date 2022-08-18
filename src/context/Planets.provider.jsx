@@ -28,10 +28,26 @@ export default function PlanetsProvider({ children }) {
     }));
   };
 
+  const removeColumnFilter = (key) => {
+    const removeFilter = { ...filters.byColumns };
+    delete removeFilter[key];
+    setFilters((prevState) => ({ ...prevState, byColumns: removeFilter }));
+  };
+
+  const cleanAllColumnFilters = () => {
+    setFilters((prevState) => ({ ...prevState, byColumns: {} }));
+  };
+
   return (
     <PlanetsContext.Provider
       value={ {
-        planets, updatePlanets, filters, setNameFilter, setColumnFilter,
+        planets,
+        updatePlanets,
+        filters,
+        setNameFilter,
+        setColumnFilter,
+        removeColumnFilter,
+        cleanAllColumnFilters,
       } }
     >
       { children }

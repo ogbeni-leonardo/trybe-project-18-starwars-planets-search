@@ -4,6 +4,7 @@ import fetchStarWarsPlanets from '../services/fetchStarWarsPlanets';
 
 import PlanetsContext from '../context/Planets.context';
 import FilterForm from './FilterForm';
+import FiltersAdded from './FiltersAdded';
 import Table from './Table';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   return (
     <main>
       <FilterForm />
+      <FiltersAdded />
       <Table />
     </main>
   );
