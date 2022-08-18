@@ -5,6 +5,7 @@ import planetsMock from './mocks/planetsMock';
 
 import PlanetsProvider from '../context/Planets.provider';
 import App from '../components/App';
+import userEvent from '@testing-library/user-event';
 
 describe('Test do componente "App"', () => {
   beforeEach(() => {
@@ -23,6 +24,7 @@ describe('Test do componente "App"', () => {
     await waitFor(() => expect(fetch).toHaveBeenCalled());
 
     expect(screen.getByTestId('filter-form')).toBeInTheDocument();
+    expect(screen.getByTestId('filters-added')).toBeInTheDocument();
     expect(screen.getByRole('table')).toBeInTheDocument();
   });
 
@@ -34,7 +36,6 @@ describe('Test do componente "App"', () => {
     );
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
-
     expect(screen.queryAllByRole('row')).toHaveLength(11);
   });
 
@@ -48,7 +49,28 @@ describe('Test do componente "App"', () => {
     );
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
-
     expect(screen.queryAllByRole('row')).toHaveLength(1);
+  });
+
+  it('Verifica se, ao adicionar um filtro, ele é mostrado na tela podendo ser removido', async () => {
+    render(
+      <PlanetsProvider>
+        <App />
+      </PlanetsProvider>,
+    );
+
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+
+    const columnFilter = screen.getByTestId('column-filter');
+    const comparisonFilter = screen.getByTestId('comparison-filter');
+    const valueFilter = screen.getByTestId('value-filter');
+    const addFilter = screen.getByTestId('button-filter');
+
+    userEvent.selectOptions(columnFilter, ['diameter']);
+    userEvent.selectOptions(comparisonFilter, ['igual a']);
+    userEvent.type(valueFilter, '12');
+    userEvent.click(addFilter);
+
+    expect(screen.getByText(/diameter igual a 012/i)).toBeInTheDocument();
   });
 });

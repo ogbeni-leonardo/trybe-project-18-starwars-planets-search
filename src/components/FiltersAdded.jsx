@@ -10,14 +10,12 @@ export default () => {
   } = useContext(PlanetsContext);
 
   return (
-    <section>
+    <section data-testid="filters-added">
       Eu sou a área de filtros adicionados.
       { filters.byColumns && Object.keys(filters.byColumns).map((key) => (
         <div key={ key } data-testid="filter">
           <p>
-            {key}
-            {filters.byColumns[key][0]}
-            {filters.byColumns[key][1]}
+            {`${key} ${filters.byColumns[key][0]} ${filters.byColumns[key][1]}`}
           </p>
 
           <button
