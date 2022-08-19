@@ -4,36 +4,36 @@ import PlanetsContext from '../context/Planets.context';
 
 export default () => {
   const {
-    filters,
-    removeColumnFilter,
-    cleanAllColumnFilters,
+    filters, removeColumnFilter, clearAllColumnFilters,
   } = useContext(PlanetsContext);
 
   return (
     <section data-testid="filters-added">
-      Eu sou a área de filtros adicionados.
-      { filters.byColumns && Object.keys(filters.byColumns).map((key) => (
-        <div key={ key } data-testid="filter">
-          <p>
-            {`${key} ${filters.byColumns[key][0]} ${filters.byColumns[key][1]}`}
-          </p>
+      { filters.filteredByColumns
+        && Object.keys(filters.filteredByColumns)
+          .map((key) => (
+            <div key={ key } data-testid="filter">
+              <p>
+                {`${key} ${filters.filteredByColumns[key][0]} ${
+                  filters.filteredByColumns[key][1]}`}
+              </p>
 
-          <button
-            type="button"
-            onClick={ () => removeColumnFilter(key) }
-          >
-            Apagar filtro
-          </button>
-        </div>
-      )) }
+              <button
+                type="button"
+                data-testid="remove-filter"
+                onClick={ () => removeColumnFilter(key) }
+              >
+                Remover filtro
+              </button>
+            </div>
+          )) }
 
       <button
         type="button"
         data-testid="button-remove-filters"
-        onClick={ cleanAllColumnFilters }
+        onClick={ clearAllColumnFilters }
       >
         Clean all filters
-
       </button>
     </section>
   );

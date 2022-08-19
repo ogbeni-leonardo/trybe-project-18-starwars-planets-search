@@ -6,9 +6,9 @@ import PlanetsContext from './Planets.context';
 export default function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
   const [filters, setFilters] = useState({
-    byName: '',
-    byColumns: {},
-    sortBy: [],
+    filteredByName: '',
+    filteredByColumns: {},
+    sortedByColumn: [],
   });
 
   const updatePlanets = (arrayOfPlanets) => {
@@ -19,41 +19,40 @@ export default function PlanetsProvider({ children }) {
   };
 
   const setNameFilter = (value) => {
-    setFilters((prevState) => ({ ...prevState, byName: value }));
+    setFilters((prevState) => ({ ...prevState, filteredByName: value }));
   };
 
   const setColumnFilter = (object) => {
     setFilters((prevState) => ({
       ...prevState,
-      byColumns: { ...prevState.byColumns, ...object },
+      filteredByColumns: { ...prevState.filteredByColumns, ...object },
     }));
   };
 
   const removeColumnFilter = (key) => {
-    const removeFilter = { ...filters.byColumns };
-    delete removeFilter[key];
-    setFilters((prevState) => ({ ...prevState, byColumns: removeFilter }));
+    const removeFilter = { ...filters.filteredByColumns }; delete removeFilter[key];
+    setFilters((prevState) => ({ ...prevState, filteredByColumns: removeFilter }));
   };
 
-  const cleanAllColumnFilters = () => {
-    setFilters((prevState) => ({ ...prevState, byColumns: {} }));
+  const clearAllColumnFilters = () => {
+    setFilters((prevState) => ({ ...prevState, filteredByColumns: {} }));
   };
 
   const setSortFilter = (array) => {
-    setFilters((prevState) => ({ ...prevState, sortBy: array }));
+    setFilters((prevState) => ({ ...prevState, sortedByColumn: array }));
   };
 
   return (
     <PlanetsContext.Provider
       value={ {
-        planets,
-        updatePlanets,
+        clearAllColumnFilters,
         filters,
-        setNameFilter,
-        setColumnFilter,
+        planets,
         removeColumnFilter,
-        cleanAllColumnFilters,
+        setColumnFilter,
+        setNameFilter,
         setSortFilter,
+        updatePlanets,
       } }
     >
       { children }

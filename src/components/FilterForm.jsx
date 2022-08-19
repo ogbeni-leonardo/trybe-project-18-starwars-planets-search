@@ -4,12 +4,12 @@ import PlanetsContext from '../context/Planets.context';
 
 export default () => {
   const [formData, setFormData] = useState({
-    byName: '',
-    byColumn: 'population',
-    byComparison: 'maior que',
-    byValue: '0',
-    byColumnSort: 'population',
-    sortBy: 'ASC',
+    name: '',
+    column: 'population',
+    comparison: 'maior que',
+    value: '0',
+    columnToSort: 'population',
+    orderBy: 'ASC',
   });
 
   const {
@@ -17,66 +17,65 @@ export default () => {
   } = useContext(PlanetsContext);
 
   const COLUMN_FILTERS = [
-    'population', 'orbital_period', 'diameter',
-    'rotation_period', 'surface_water',
-  ].filter((column) => !Object.keys(filters.byColumns).includes(column));
+    'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
+  ];
 
   const handleChange = ({ target: { name, value } }) => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
-    if (name === 'byName') setNameFilter(value);
+    if (name === 'name') setNameFilter(value);
   };
 
-  const filterByColumn = () => {
-    setColumnFilter({
-      [formData.byColumn]: [formData.byComparison, formData.byValue],
-    });
+  const setFilterByColumn = () => {
+    setColumnFilter({ [formData.column]: [formData.comparison, formData.value] });
 
-    setFormData((prevState) => ({ ...prevState, byColumn: COLUMN_FILTERS[0] || '' }));
+    const selectNextOption = COLUMN_FILTERS
+      .filter((column) => column !== formData.column
+      && !Object.keys(filters.filteredByColumns).includes(column))[0];
+
+    setFormData((prevState) => ({ ...prevState, column: selectNextOption }));
   };
 
-  const sortFilter = () => {
-    setSortFilter([formData.byColumnSort, formData.sortBy]);
+  const setSortByColumn = () => {
+    setSortFilter([formData.columnToSort, formData.orderBy]);
   };
-
-  const opts = [
-    'population', 'orbital_period', 'diameter',
-    'rotation_period', 'surface_water',
-  ];
 
   return (
     <form data-testid="filter-form">
-      <label htmlFor="byName">
+      <label htmlFor="name">
         <input
           data-testid="name-filter"
           type="text"
-          id="byName"
-          name="byName"
-          value={ formData.byName }
+          id="name"
+          name="name"
+          value={ formData.name }
           onChange={ handleChange }
         />
       </label>
 
-      <label htmlFor="byColumn">
+      <label htmlFor="column">
         <select
           data-testid="column-filter"
-          id="byColumn"
-          name="byColumn"
+          id="column"
+          name="column"
           onChange={ handleChange }
-          value={ formData.byColumn }
+          value={ formData.column }
+          defaultChecked
         >
-          { COLUMN_FILTERS.map((column, index) => (
-            <option key={ index } value={ column }>{column}</option>
-          )) }
+          { COLUMN_FILTERS
+            .filter((column) => !Object.keys(filters.filteredByColumns).includes(column))
+            .map((column, index) => (
+              <option key={ index } value={ column } defaultChecked>{column}</option>
+            )) }
         </select>
       </label>
 
-      <label htmlFor="byComparison">
+      <label htmlFor="comparison">
         <select
           data-testid="comparison-filter"
-          id="byComparison"
-          name="byComparison"
+          id="comparison"
+          name="comparison"
           onChange={ handleChange }
-          value={ formData.byComparison }
+          value={ formData.comparison }
         >
           <option value="maior que">maior que</option>
           <option value="menor que">menor que</option>
@@ -84,13 +83,13 @@ export default () => {
         </select>
       </label>
 
-      <label htmlFor="byValue">
+      <label htmlFor="value">
         <input
           data-testid="value-filter"
           type="number"
-          id="byValue"
-          name="byValue"
-          value={ formData.byValue }
+          id="value"
+          name="value"
+          value={ formData.value }
           onChange={ handleChange }
         />
       </label>
@@ -98,44 +97,41 @@ export default () => {
       <button
         type="button"
         data-testid="button-filter"
-        onClick={ filterByColumn }
+        onClick={ setFilterByColumn }
       >
         Filter
       </button>
 
-      <label htmlFor="byColumnSort">
+      <label htmlFor="columnToSort">
         <select
           data-testid="column-sort"
-          id="byColumnSort"
-          name="byColumnSort"
+          id="columnToSort"
+          name="columnToSort"
           onChange={ handleChange }
-          value={ formData.byColumnSort }
+          value={ formData.columnToSort }
         >
-          { opts.map((column) => (
-            <option
-              key={ column }
-              value={ column }
-            >
+          { COLUMN_FILTERS.map((column) => (
+            <option key={ column } value={ column }>
               {column}
             </option>
           ))}
         </select>
       </label>
 
-      <label htmlFor="sortBy">
+      <label htmlFor="orderBy">
         <input
           type="radio"
-          name="sortBy"
+          name="orderBy"
           onChange={ handleChange }
           data-testid="column-sort-input-asc"
           value="ASC"
         />
       </label>
 
-      <label htmlFor="sortBy">
+      <label htmlFor="orderBy">
         <input
           type="radio"
-          name="sortBy"
+          name="orderBy"
           onChange={ handleChange }
           data-testid="column-sort-input-desc"
           value="DESC"
@@ -145,7 +141,7 @@ export default () => {
       <button
         data-testid="column-sort-button"
         type="button"
-        onClick={ sortFilter }
+        onClick={ setSortByColumn }
       >
         Ordenar
       </button>

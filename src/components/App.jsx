@@ -14,7 +14,6 @@ function App() {
     fetchStarWarsPlanets().then((data) => {
       updatePlanets(data?.results || []);
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

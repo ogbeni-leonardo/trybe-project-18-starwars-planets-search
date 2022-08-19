@@ -5,8 +5,8 @@ import PlanetsContext from '../context/Planets.context';
 export default () => {
   const TABLE_HEADERS = [
     'Name', 'Rotation Period', 'Orbital Period', 'Diameter', 'Climate', 'Gravity',
-    'Terrain', 'Surface Water', 'Population', 'Films', 'Created',
-    'Edited', 'URL'];
+    'Terrain', 'Surface Water', 'Population', 'Films', 'Created', 'Edited', 'URL',
+  ];
 
   const { planets, filters } = useContext(PlanetsContext);
 
@@ -17,33 +17,30 @@ export default () => {
   };
 
   const planetsFilteredByColumn = (planet) => {
-    if (Object.keys(filters.byColumns).length === 0) return true;
+    if (Object.keys(filters.filteredByColumns).length === 0) return true;
+
     const isItAValidPlanet = [];
 
-    Object.entries(filters.byColumns).forEach(([column, filter]) => {
-      const value = Number(planet[column]);
-      const operator = filter[0];
-      const comparison = Number(filter[1]);
-
-      isItAValidPlanet.push(columnOperator(value, operator, comparison));
+    Object.entries(filters.filteredByColumns).forEach(([column, filter]) => {
+      isItAValidPlanet.push(columnOperator(
+        Number(planet[column]), filter[0], Number(filter[1]),
+      ));
     });
 
     return !isItAValidPlanet.includes(false);
   };
 
-  const sortBy = (a, b) => {
-    const valueA = a[filters.sortBy[0]];
-    const valueB = b[filters.sortBy[0]];
+  const planetsSortedByColumn = (current, next) => {
+    const currentValue = current[filters.sortedByColumn[0]];
+    const nextValue = next[filters.sortedByColumn[0]];
 
-    console.log(valueA, valueB);
-
-    if (filters.sortBy[1] === 'ASC') {
-      if (valueA === 'unknown') return 1;
-      if (valueB === 'unknown') return 0 - 1;
-
-      return Number(valueA) - Number(valueB);
+    if (filters.sortedByColumn[1] === 'ASC') {
+      if (currentValue === 'unknown') return 1;
+      if (nextValue === 'unknown') return 0 - 1;
+      return currentValue - nextValue;
     }
-    return valueB - valueA;
+
+    return nextValue - currentValue;
   };
 
   return (
@@ -56,10 +53,9 @@ export default () => {
 
       <tbody>
         { planets
-          .filter((planet) => (planet.name).toLowerCase()
-            .includes(filters.byName.toLowerCase()))
+          .filter((planet) => planet.name.match(new RegExp(filters.filteredByName, 'i')))
           .filter((planet) => planetsFilteredByColumn(planet))
-          .sort(sortBy)
+          .sort(planetsSortedByColumn)
           .map((planet, index) => (
             <tr key={ index }>
               <td data-testid="planet-name">{planet.name}</td>
