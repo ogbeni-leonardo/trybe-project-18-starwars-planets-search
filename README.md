@@ -1,4 +1,4 @@
-# StarWars Planets Search
+# Star Wars Planets Search
 
 Iniciando os conhecimentos em **Hooks** e **Context API**, esta aplicação consistem em uma sequência de filtros de planetas do universo de **Star Wars**.
 
